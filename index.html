@@ -1,0 +1,394 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>i found an old telephone and made it control spotify</title>
+    <style>
+        :root {
+            --bg-color: #121212;
+            --text-color: #e0e0e0;
+            --heading-color: #ffffff;
+            --accent-color: #1DB954; /* Spotify green */
+            --code-bg: #282828;
+            --border-color: #333333;
+        }
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+        .container {
+            max-width: 680px;
+            width: 100%;
+            padding: 40px 0;
+        }
+        h1, h2, h3 {
+            color: var(--heading-color);
+            margin-top: 2em;
+            margin-bottom: 0.75em;
+            font-weight: 600;
+        }
+        h1 {
+            font-size: 2.2em;
+            line-height: 1.2;
+            margin-top: 0;
+            color: var(--heading-color);
+        }
+        p {
+            margin: 1.2em 0;
+        }
+        ul {
+            padding-left: 20px;
+            margin: 1.2em 0;
+        }
+        li {
+            margin-bottom: 0.5em;
+        }
+        blockquote {
+            border-left: 4px solid var(--accent-color);
+            margin: 1.5em 0;
+            padding: 0.5em 1em;
+            color: #b3b3b3;
+            background-color: rgba(29, 185, 84, 0.05);
+            font-style: italic;
+        }
+        pre {
+            background-color: var(--code-bg);
+            padding: 1.2em;
+            border-radius: 6px;
+            overflow-x: auto;
+            border: 1px solid var(--border-color);
+            margin: 1.5em 0;
+        }
+        code {
+            background-color: var(--code-bg);
+            padding: 0.2em 0.4em;
+            border-radius: 3px;
+            font-family: "Courier New", Courier, monospace;
+            font-size: 0.9em;
+            color: #ffb86c;
+        }
+        pre code {
+            color: inherit;
+            background-color: transparent;
+            padding: 0;
+        }
+        hr {
+            border: 0;
+            border-top: 1px solid var(--border-color);
+            margin: 3em 0;
+        }
+        a {
+            color: var(--accent-color);
+            text-decoration: none;
+            transition: opacity 0.2s ease;
+        }
+        a:hover {
+            opacity: 0.8;
+            text-decoration: underline;
+        }
+        strong {
+            color: #ffffff;
+        }
+
+        img {
+            max-width: 75%;
+            border-radius: 8px;
+            margin: 1.5em 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📞 i found an old telephone and made it control spotify</h1>
+        <img src="/assets/final.png" alt="Final Project Image">
+        
+        <p>i wasn't planning to build anything that day</p>
+        <p>i was just cleaning my room</p>
+        <p>you know that phase where you start opening random boxes and suddenly you're 3 hours deep into "why do i even own this"</p>
+        <p>that's when i found it</p>
+        
+        <p>an old beetel m59 landline telephone<br>
+        just sitting there<br>
+        probably hasn't been touched in like 5-6 years</p>
+        
+        <p>normal people would either ignore it or throw it away</p>
+        <p>i opened it</p>
+
+        <hr>
+
+        <h2>okay but what's inside a telephone?</h2>
+        <p>i had zero expectations</p>
+        <p>but inside was actually kinda interesting:</p>
+        <ul>
+            <li>a keypad (obviously)</li>
+            <li>some weird lcd</li>
+            <li>a pcb that looked way more complicated than it should've been</li>
+        </ul>
+
+        <p>the keypad was the first thing i focused on</p>
+        <p>it wasn't wired like "one pin per button"<br>
+        it was a <strong>matrix</strong></p>
+
+        <p>basically like a cheap keyboard<br>
+        press a button -> it connects two lines</p>
+
+        <p>so yeah<br>
+        multimeter time</p>
+
+        <hr>
+
+        <h2>reverse engineering (aka poking random pins until something makes sense)</h2>
+        <p>this part was honestly messy</p>
+        <p>no datasheets<br>
+        no labels<br>
+        just me checking continuity like:</p>
+
+        <blockquote>"okay if i press 5... does this connect... this? no. okay what about this?"</blockquote>
+
+        <p>repeat that like 50 times</p>
+        <p>eventually i mapped enough keys:</p>
+
+        <ul>
+            <li>numbers (0-9)</li>
+            <li><code>*</code> and <code>#</code></li>
+            <li>redial</li>
+            <li>volume buttons</li>
+        </ul>
+
+        <p>not everything worked<br>
+        but i didn't need everything</p>
+        <p>just enough</p>
+
+        <img src="/assets/mapping.png" alt="">
+
+        <hr>
+
+        <h2>the idea didn't come from the phone</h2>
+        <p>it came from being annoyed</p>
+        
+        <p>i was cleaning<br>
+        music was playing<br>
+        and i kept needing to go back to my laptop to change songs</p>
+
+        <p>and at some point my brain went:</p>
+
+        <blockquote>what if i could just... press something nearby?</blockquote>
+
+        <p>then i looked at the phone again</p>
+        <p>and yeah</p>
+        <p>that was it</p>
+
+        <hr>
+
+        <h2>what if i could dial a number and it plays a song</h2>
+        <p>not search<br>
+        not scroll<br>
+        not click</p>
+
+        <p>just:</p>
+
+        <pre><code>pick up -> dial -> music plays</code></pre>
+
+        <p>it sounded stupid</p>
+        <p>which is usually a good sign</p>
+
+        <hr>
+
+        <h2>hardware hacking begins</h2>
+        
+        <p>first problem:<br>
+        this thing was not meant to be reused</p>
+
+        <p>so i basically forced it to work</p>
+        <ul>
+            <li>soldered wires directly onto the keypad pcb</li>
+            <li>connected everything to an ESP32</li>
+            <li>built a small perfboard to manage connections</li>
+        </ul>
+
+        <p>and then there was this tiny detail that turned out to be insanely useful:</p>
+
+        <h3>the hook switch</h3>
+
+        <p>you know the thing that detects if the handset is lifted?</p>
+        <p>yeah that</p>
+        <p>i wired that too</p>
+
+        <p>so now:</p>
+        <ul>
+            <li>handset down -> idle</li>
+            <li>handset up -> start input mode</li>
+        </ul>
+
+        <p>and i used it to do something subtle but nice:</p>
+        <ul>
+            <li>pick up -> volume goes down</li>
+            <li>put back -> music resumes normally</li>
+        </ul>
+
+        <p>this wasn't planned<br>
+        but it made the whole thing feel... real</p>
+
+        <hr>
+
+        <h2>the lcd had to go</h2>
+
+        <p>the original display was cursed</p>
+        <ul>
+            <li>no docs</li>
+            <li>probably proprietary</li>
+            <li>no idea how to talk to it</li>
+        </ul>
+
+        <p>so i didn't</p>
+
+        <p>i just replaced it with a <strong>16x2 i2c lcd</strong></p>
+
+        <p>way easier</p>
+
+        <p>now it shows:</p>
+        <ul>
+            <li>digits while dialing</li>
+            <li>song name while playing</li>
+        </ul>
+
+        <p>done</p>
+
+        <hr>
+
+        <h2>now the actual system</h2>
+
+        <p>this is where it stopped being "random hardware experiment"</p>
+        <p>and became an actual project</p>
+
+        <p>there are basically two sides:</p>
+
+        <h3>1. ESP32 (inside the phone)</h3>
+        <p>handles:</p>
+        <ul>
+            <li>keypad input</li>
+            <li>state logic</li>
+            <li>talking to backend</li>
+            <li>controlling spotify</li>
+        </ul>
+
+        <h3>2. web app (flask + mongodb)</h3>
+        <p>handles:</p>
+        <ul>
+            <li>mapping numbers -> songs</li>
+            <li>storing data</li>
+            <li>simple dashboard</li>
+        </ul>
+
+        <p>so instead of hardcoding songs, i made it dynamic</p>
+
+        <img src="/assets/works.png" alt="">
+
+        <hr>
+
+        <h2>how dialing actually works</h2>
+
+        <p>this part is simple but important</p>
+        
+        <p>you pick up the phone<br>
+        start pressing numbers</p>
+
+        <p>esp32 stores them like:</p>
+
+        <pre><code>"4" -> "42" -> "421"</code></pre>
+
+        <p>then:</p>
+        <ul>
+            <li>if you stop typing for ~2 seconds</li>
+            <li>OR press <code>#</code></li>
+        </ul>
+
+        <p>it sends that number to the backend</p>
+
+        <p>backend checks:</p>
+        <blockquote>does this code exist?</blockquote>
+
+        <p>if yes -> return spotify uri<br>
+        if no -> ignore</p>
+
+        <hr>
+
+        <h2>example</h2>
+
+        <pre><code>56 -> "Let it Happen"
+99 -> "some playlist"</code></pre>
+
+        <p>so if i dial <code>56</code></p>
+        <p>spotify just starts playing that track on my device</p>
+        
+        <hr>
+
+        <h2>controls</h2>
+        <p>i reused extra buttons:</p>
+        <ul>
+            <li><strong>redial</strong> -> restart track</li>
+            <li><strong>up</strong> -> previous</li>
+            <li><strong>down</strong> -> next</li>
+            <li>volume exists... but i haven't fully done it yet</li>
+        </ul>
+
+        <p>(yeah yeah i know)</p>
+
+        <hr>
+
+        <h2>one important design decision</h2>
+        <p>the esp32 <strong>caches all songs on boot</strong></p>
+        <p>so:</p>
+        <ul>
+            <li>no api call while dialing</li>
+            <li>no latency</li>
+            <li>instant response</li>
+        </ul>
+
+        <p>it only talks to spotify when it actually needs to play something</p>
+        <p>this made a huge difference</p>
+
+        <hr>
+
+        <h2>the moment it worked</h2>
+        <p>this is the part that actually matters</p>
+
+        <p>i picked up the handset<br>
+        dialed a number</p>
+
+        <p>and it just... worked</p>
+        <p>music started playing</p>
+        <p>through a phone that was literally dead for years</p>
+
+        <p>that moment is the whole reason this project exists</p>
+
+        <hr>
+
+        <h2>also</h2>
+        <p>there's something weirdly satisfying about using old hardware for something modern</p>
+        
+        <p>like you're not just building</p>
+        <p>you're <em>continuing</em> something that already existed</p>
+
+        <hr>
+
+        <h2>anyway</h2>
+        <p>that's <em>the beetel</em> - yeah the name's a bit of a joke, the phone itself is from Beetel and somewhere in my head that immediately connected to The Beatles, and it just stuck. it felt fitting though - something old, something iconic, but doing something completely different now. a dead landline turned into a music machine. honestly, the name probably made less sense at the start, but after building it... it kinda earned it.</p>
+
+        <hr>
+
+        <p>if you want to build it, the repo has everything:</p>
+        <p><a href="https://github.com/natyavidhan/the-beetel">https://github.com/natyavidhan/the-beetel</a></p>
+
+    </div>
+</body>
+</html>
+

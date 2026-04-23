@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Beetel Song Manager{% endblock %}</title>
+  <meta name="description" content="Manage dial-code to Spotify song mappings for your Beetel telephone controller">
+  <link rel="stylesheet" href="/static/css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📞</text></svg>">
+</head>
+<body>
+  <div class="app-wrapper">
+    {% block navbar %}
+    <nav class="navbar">
+      <div class="container">
+        <a href="/" class="navbar-brand">
+          <div class="brand-icon">📞</div>
+          <span>Beetel</span>
+        </a>
+        <div class="navbar-links">
+          <a href="/" class="nav-link {% if request.url.path == '/' %}active{% endif %}">Dashboard</a>
+          <a href="/settings" class="nav-link {% if request.url.path == '/settings' %}active{% endif %}">Settings</a>
+          <a href="/logout" class="nav-link logout">Logout</a>
+        </div>
+      </div>
+    </nav>
+    {% endblock %}
+
+    <main class="main-content">
+      <div class="container">
+        {% block content %}{% endblock %}
+      </div>
+    </main>
+  </div>
+
+  <!-- Toast container -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <script src="/static/js/app.js"></script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

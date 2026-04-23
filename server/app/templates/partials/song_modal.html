@@ -1,0 +1,81 @@
+<!-- Song Add/Edit Modal -->
+<div class="modal-overlay" id="song-modal-overlay">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 class="modal-title" id="modal-title">Add New Song</h2>
+      <button class="modal-close" onclick="closeModal()">×</button>
+    </div>
+
+    <div class="modal-body">
+      <form id="song-form" onsubmit="event.preventDefault(); saveSong();">
+        <input type="hidden" id="form-song-id">
+
+        <!-- Dial Code -->
+        <div class="form-group">
+          <label class="form-label" for="form-dial-code">Dial Code</label>
+          <input class="form-input mono" type="text" id="form-dial-code"
+                 placeholder="e.g. 32" maxlength="6" inputmode="numeric"
+                 pattern="[0-9]*" required>
+          <div class="form-hint">1–6 digits that map to this song on the phone keypad</div>
+          <div class="form-error" id="error-dial-code"></div>
+        </div>
+
+        <!-- Spotify URI -->
+        <div class="form-group">
+          <label class="form-label" for="form-spotify-uri">Spotify URL or URI</label>
+          <div class="input-row">
+            <input class="form-input mono" type="text" id="form-spotify-uri"
+                   placeholder="https://open.spotify.com/track/... or spotify:track:..." required>
+            <button type="button" class="btn btn-secondary btn-sm" id="lookup-btn"
+                    onclick="spotifyLookup()" title="Lookup metadata from Spotify">
+              🔍 Lookup
+            </button>
+          </div>
+          <div class="form-hint">Paste a Spotify URL or URI — URLs are auto-converted</div>
+          <div class="form-error" id="error-spotify-uri"></div>
+        </div>
+
+        <!-- Song Name -->
+        <div class="form-group">
+          <label class="form-label" for="form-song-name">Song Name</label>
+          <input class="form-input" type="text" id="form-song-name"
+                 placeholder="e.g. Chill Vibes">
+          <div class="form-hint">Auto-filled by Lookup, or enter manually</div>
+        </div>
+
+        <!-- Artist -->
+        <div class="form-group">
+          <label class="form-label" for="form-artist">Artist</label>
+          <input class="form-input" type="text" id="form-artist"
+                 placeholder="e.g. Spotify">
+        </div>
+
+        <!-- Toggles -->
+        <div class="form-group">
+          <div class="toggle-group">
+            <label class="toggle">
+              <input type="checkbox" id="form-is-playlist">
+              <span class="toggle-slider"></span>
+            </label>
+            <span class="toggle-label">This is a playlist / album</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="toggle-group">
+            <label class="toggle">
+              <input type="checkbox" id="form-active" checked>
+              <span class="toggle-slider"></span>
+            </label>
+            <span class="toggle-label">Active (served to ESP32)</span>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-primary" id="modal-submit-btn" onclick="saveSong()">Add Song</button>
+    </div>
+  </div>
+</div>

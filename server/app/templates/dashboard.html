@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+{% block title %}Dashboard — Beetel Song Manager{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="page-header fade-up">
+  <h1 class="page-title">Song Dashboard</h1>
+  <p class="page-subtitle">Manage your dial-code → Spotify mappings</p>
+</div>
+
+{% if not db_connected %}
+<div class="fade-up" style="background: var(--warning-subtle); border: 1px solid rgba(245,166,35,0.3); border-radius: var(--radius-md); padding: var(--space-md) var(--space-lg); margin-bottom: var(--space-xl); color: var(--warning); font-size: 0.875rem;">
+  ⚠️ <strong>Database not connected.</strong> Check your <code>MONGO_URI</code> in <code>.env</code>. The dashboard will work once MongoDB is reachable.
+</div>
+{% endif %}
+
+<!-- Stats -->
+<div class="stats-bar fade-up fade-up-delay-1">
+  <div class="stat-card">
+    <div class="stat-value green">{{ total }}</div>
+    <div class="stat-label">Total Songs</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-value blue">{{ active_count }}</div>
+    <div class="stat-label">Active</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-value yellow">{{ playlist_count }}</div>
+    <div class="stat-label">Playlists</div>
+  </div>
+</div>
+
+<!-- Toolbar -->
+<div class="toolbar fade-up fade-up-delay-2">
+  <div class="search-box">
+    <span class="search-icon">🔍</span>
+    <input type="text" id="search-input" placeholder="Search by name, artist, or dial code…">
+  </div>
+  <button class="btn btn-primary" onclick="openModal('add')">
+    <span>＋</span> Add Song
+  </button>
+</div>
+
+<!-- Song Table -->
+<div class="table-wrapper fade-up fade-up-delay-3">
+  <table class="song-table" id="song-table">
+    <thead>
+      <tr>
+        <th>Dial Code</th>
+        <th>Song Name</th>
+        <th>Artist</th>
+        <th class="col-uri">Spotify URI</th>
+        <th>Type</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% if songs|length == 0 %}
+      <tr class="empty-row">
+        <td colspan="7">
+          <div class="empty-state">
+            <div class="empty-state-icon">📞</div>
+            <div class="empty-state-text">No songs yet. Add your first dial code mapping!</div>
+            <button class="btn btn-primary" onclick="openModal('add')">
+              <span>＋</span> Add First Song
+            </button>
+          </div>
+        </td>
+      </tr>
+      {% endif %}
+
+      {% for song in songs %}
+      <tr class="{% if not song.active %}inactive{% endif %}" data-id="{{ song.id }}">
+        <td><span class="dial-code">{{ song.dial_code }}</span></td>
+        <td><strong>{{ song.song_name or '—' }}</strong></td>
+        <td>{{ song.artist or '—' }}</td>
+        <td class="col-uri"><span class="uri-cell" title="{{ song.spotify_uri }}">{{ song.spotify_uri }}</span></td>
+        <td>
+          {% if song.is_playlist %}
+            <span class="badge badge-playlist">Playlist</span>
+          {% else %}
+            <span class="badge badge-track">Track</span>
+          {% endif %}
+        </td>
+        <td>
+          <span class="badge {% if song.active %}badge-active{% else %}badge-inactive{% endif %}"
+                style="cursor:pointer" title="Click to toggle"
+                onclick="toggleActive('{{ song.id }}', {{ song.active | tojson }})">
+            <span class="badge-dot"></span>
+            {{ 'Active' if song.active else 'Inactive' }}
+          </span>
+        </td>
+        <td>
+          <div class="row-actions">
+            <button class="btn btn-ghost btn-sm"
+                    onclick='openModal("edit", {{ song | tojson }})' title="Edit">
+              ✏️
+            </button>
+            <button class="btn btn-ghost btn-sm"
+                    onclick="confirmDelete('{{ song.id }}', '{{ song.song_name | e }}')" title="Delete">
+              🗑️
+            </button>
+          </div>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<!-- Song Modal -->
+{% include "partials/song_modal.html" %}
+
+<!-- Confirm Delete Dialog -->
+<div class="confirm-overlay" id="confirm-overlay">
+  <div class="confirm-box">
+    <p id="confirm-message">Are you sure?</p>
+    <div class="confirm-actions">
+      <button class="btn btn-secondary" onclick="cancelDelete()">Cancel</button>
+      <button class="btn btn-primary" style="background:var(--danger);border-color:var(--danger)" onclick="executeDelete()">Delete</button>
+    </div>
+  </div>
+</div>
+{% endblock %}

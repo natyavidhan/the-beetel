@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+{% block title %}Settings — Beetel Song Manager{% endblock %}
+
+{% block content %}
+<div class="page-header fade-up">
+  <h1 class="page-title">Settings</h1>
+  <p class="page-subtitle">Configure Spotify integration and API access</p>
+</div>
+
+<div class="settings-grid">
+  <!-- Spotify Credentials -->
+  <div class="settings-section fade-up fade-up-delay-1">
+    <h3 class="settings-section-title">Spotify Integration</h3>
+    <p class="settings-section-desc">Used for the "Lookup" feature to auto-fill song names and artists. Requires a <a href="https://developer.spotify.com/dashboard" target="_blank">Spotify Developer</a> app.</p>
+
+    <div class="form-group">
+      <label class="form-label">Client ID</label>
+      <div class="api-key-display">
+        <code>{{ spotify_client_id if spotify_client_id else 'Not configured' }}</code>
+        {% if spotify_client_id %}
+        <button class="copy-btn" onclick="copyToClipboard('{{ spotify_client_id }}')" title="Copy">📋</button>
+        {% endif %}
+      </div>
+      <div class="form-hint">Set via <code>SPOTIFY_CLIENT_ID</code> environment variable</div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Client Secret</label>
+      <div class="api-key-display">
+        <code>{{ '••••••••' + spotify_client_secret[-4:] if spotify_client_secret and spotify_client_secret|length > 4 else ('Not configured' if not spotify_client_secret else '••••••••') }}</code>
+      </div>
+      <div class="form-hint">Set via <code>SPOTIFY_CLIENT_SECRET</code> environment variable</div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Refresh Token</label>
+      <div class="api-key-display">
+        <code>{{ '••••••••' + spotify_refresh_token[-4:] if spotify_refresh_token and spotify_refresh_token|length > 4 else ('Not configured' if not spotify_refresh_token else '••••••••') }}</code>
+      </div>
+      <div class="form-hint">Set via <code>SPOTIFY_REFRESH_TOKEN</code> var. Required to control playback on the ESP32.</div>
+    </div>
+
+    <button class="btn btn-secondary" id="test-spotify-btn" onclick="testSpotify()">
+      Test Connection
+    </button>
+    <div id="spotify-test-result" style="margin-top: var(--space-sm)"></div>
+  </div>
+
+  <!-- ESP32 API Key -->
+  <div class="settings-section fade-up fade-up-delay-2">
+    <h3 class="settings-section-title">ESP32 API Key</h3>
+    <p class="settings-section-desc">The ESP32 sends this as an <code>X-API-Key</code> header to authenticate API requests. Both the web app and firmware must use the same key.</p>
+
+    <div class="form-group">
+      <label class="form-label">API Key</label>
+      <div class="api-key-display">
+        <code id="api-key-value">{{ esp32_api_key if esp32_api_key else 'Not configured' }}</code>
+        {% if esp32_api_key %}
+        <button class="copy-btn" onclick="copyToClipboard('{{ esp32_api_key }}')" title="Copy">📋</button>
+        {% endif %}
+      </div>
+      <div class="form-hint">Set via <code>ESP32_API_KEY</code> environment variable</div>
+    </div>
+  </div>
+
+  <!-- API Info -->
+  <div class="settings-section fade-up fade-up-delay-3">
+    <h3 class="settings-section-title">API Endpoints</h3>
+    <p class="settings-section-desc">These are the REST endpoints your ESP32 firmware should call.</p>
+
+    <div class="form-group">
+      <label class="form-label">Health Check</label>
+      <div class="api-key-display">
+        <code>GET /api/health</code>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">All Active Songs</label>
+      <div class="api-key-display">
+        <code>GET /api/songs</code>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Song by Dial Code</label>
+      <div class="api-key-display">
+        <code>GET /api/songs/{dial_code}</code>
+      </div>
+    </div>
+
+    <h4 style="margin-top:20px; font-size:14px; color:var(--text-secondary)">Player Controls (Requires Refresh Token)</h4>
+
+    <div class="form-group">
+      <label class="form-label">Play Song/Playlist</label>
+      <div class="api-key-display">
+        <code>POST /api/player/play</code><span style="font-size:12px; margin-left:10px; color:var(--text-muted)">{ "uri": "spotify:...", "is_playlist": true/false }</span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Playback Actions</label>
+      <div class="api-key-display">
+        <code>POST /api/player/next</code><br>
+        <code>POST /api/player/previous</code><br>
+        <code>POST /api/player/restart</code><br>
+        <code>POST /api/player/volume?percent=X</code>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Now Playing Status</label>
+      <div class="api-key-display">
+        <code>GET /api/player/now-playing</code>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
